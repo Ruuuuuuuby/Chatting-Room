@@ -153,7 +153,7 @@ Future Enhancements
 Author
 
 • ruuuuuuuby
-• Contact: [Your Email or GitHub Profile]
+• Contact: jru6055@gmail.com
 License
 
 This project is licensed under the MIT License.
