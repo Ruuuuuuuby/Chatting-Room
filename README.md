@@ -1,156 +1,159 @@
-# Chatting-Room
+# Multi-Client Chatroom Using TCP Protocol
 
-Build a TCP-based, console-controlled, multi-user chat room with login and registration functionality (no graphical interface).
-Knowledge Points Used
+This project is a command-line multi-client chatroom application implemented using Java TCP Sockets. It includes functionalities for user login, registration, and group chatting. The server processes client connections in multi-threaded mode, ensuring real-time communication between multiple users.
+Features
 
-• Loops, conditionals, collections, IO, multithreading, and network programming.
-Preparation
+1. Login and Registration:
+• Users can log in with a valid username and password.
+• New users can register, ensuring unique usernames and proper password format.
+2. Group Chat:
+• Messages sent by a client are broadcast to all connected clients.
+• Real-time message delivery using a server that handles multiple clients concurrently.
+3. Data Storage:
+• User credentials are stored in a text file (userinfo.txt) on the server.
+Technologies Used
 
-Create a txt file in the current module to store valid usernames and passwords.
-File Content:
-java
+• Java SE: Core programming language.
+• TCP Sockets: For server-client communication.
+• Multi-threading: To handle multiple clients simultaneously.
+• File I/O: For storing and retrieving user credentials.
+• Collections API: To manage connected client sockets.
+
+Project Structure
+
+bash
 ￼Copy code
-// Left is the username
-// Right is the password
+sockethomework/
+├── servicedir/
+│   └── userinfo.txt           # Stores valid usernames and passwords
+├── src/
+│   └── com/
+│       └── ruuuuuuuby/
+│           ├── server/
+│           │   ├── Server.java        # Main server code
+│           │   ├── MyRunnable.java    # Thread for handling individual clients
+│           └── client/
+│               ├── Client.java        # Main client code
+│               └── ClientMyRunnable.java # Client-side thread for receiving messages
+└── out/                        # Compiled .class files
+Prerequisites
+
+Before running the project, ensure the following:
+1. Java JDK (version 8 or higher) is installed.
+2. The userinfo.txt file exists under the servicedir directory with user credentials.
+Example userinfo.txt content:
+makefile
+￼Copy code
 zhangsan=123
 lisi=1234
 wangwu=12345
-Requirements
+How to Compile and Run
 
-1. Initial Client Prompt
-When the client starts, it connects to the server and displays the following prompt:
-java
+1. Compile the Project
+Run the following command in the project root directory:
+bash
 ￼Copy code
-Server connected successfully  
-============== Welcome to the Chat Room ==============  
-1. Login  
-2. Register  
-Please enter your choice:  
-2. Login Option
-If the user selects login, the following prompts appear:
-java
+javac -d out src/com/ruuuuuuuby/server/*.java src/com/ruuuuuuuby/client/*.java
+2. Start the Server
+Run the server to listen on port 10001:
+bash
 ￼Copy code
-Server connected successfully  
-============== Welcome to the Chat Room ==============  
-1. Login  
-2. Register  
-Please enter your choice:  
-1  
-Please enter your username:  
-3. Enter Username and Password
-The user inputs their username and password. Before pressing Enter, the input appears like this:
-java
-￼Copy code
-Server connected successfully  
-============== Welcome to the Chat Room ==============  
-1. Login  
-2. Register  
-Please enter your choice:  
-1  
-Please enter your username:  
-zhangsan  
-Please enter your password:  
-123  
-4. Server Validation
-After pressing Enter, the client sends the data to the server for validation. The server checks the txt file for the username and password and responds with one of the following messages:
-1. Login Successful:
-java
-￼Copy code
-Login successful
-2. Incorrect Password:
-java
-￼Copy code
-Incorrect password
-3. Username Not Found:
-java
-￼Copy code
-Username does not exist
-5. Client Handling Based on Server Response
-• Login Successful:
-The client can start chatting with the following prompt:
-java
-￼Copy code
-Login successful, you can now start chatting.  
-Please enter your message:  
-• Incorrect Password:
-The user is prompted to re-enter their login information:
-java
-￼Copy code
-Incorrect password  
-============== Welcome to the Chat Room ==============  
-1. Login  
-2. Register  
-Please enter your choice:  
-• Username Not Found:
-The user is prompted to re-enter their login information:
-java
-￼Copy code
-Username does not exist  
-============== Welcome to the Chat Room ==============  
-1. Login  
-2. Register  
-Please enter your choice:  
-6. Group Chat Functionality
-If login is successful, the user can start group chatting. When a client sends a message to the server:
-• The server forwards the message to all connected clients.
-Key Notes:
-• Do not use broadcast addresses, as this is specific to UDP.
-• Store all client Socket objects in a collection (e.g., a Set or List).
-• To send a message to all users, iterate through the collection and forward the message to each client.
-Message Forwarding Diagram
-The server acts as a message relay to all connected clients:
+java -cp out com.ruuuuuuuby.server.Server
+Server Output:
 arduino
 ￼Copy code
-Client 1  ----\                   /----> Client 2
-               |   Server (Relay) |
-Client 3  ----/                   \----> Client 4
-Additional Requirements
-
-Username and Password Validation Rules
-1. Username Requirements:
-• Must be unique.
-• Length: 6 to 18 characters.
-• Must contain only letters (no numbers or special characters).
-2. Password Requirements:
-• Length: 3 to 8 characters.
-• The first character must be an uppercase or lowercase letter.
-• The remaining characters must be numbers only.
-Client-Side Functionalities
-
-1. Initial Prompt:
-• The user chooses between Login or Register.
-• This repeats until they successfully log in or register.
-2. Login:
-• The client sends the following format to the server:
-java
+Server started, listening on port 10001...
+3. Start the Client
+Open a new terminal window and run the client:
+bash
 ￼Copy code
-username=zhangsan&password=123
-3. Register:
-• The client sends the following format to the server:
-java
+java -cp out com.ruuuuuuuby.client.Client
+Client Output:
+arduino
 ￼Copy code
-username=zhangsan&password=123
-4. Chat:
-• Upon successful login, the user can send messages, which the server forwards to all connected clients.
-Server-Side Functionalities
+Server connected successfully
+==============Welcome to the Chatroom================
+1 Login
+2 Register
+Enter your choice:
+Usage
 
-1. Load User Data:
-• The server reads the txt file to load valid usernames and passwords into memory.
-2. Client Connection Handling:
-• When a client connects, the server starts a new thread to handle the connection.
-3. Login and Registration:
-• Login: Validate the username and password against the file data.
-• Registration:
-• Check if the username is unique.
-• Validate the username and password formats.
-• If valid, save the new credentials to the file.
-4. Start Chat:
-• If login or registration is successful, the server allows the client to start chatting.
-5. Message Forwarding:
-• The server acts as a relay, forwarding messages from one client to all other clients.
-Example Workflow
-1. Client A logs in successfully and sends a message:
-java
+1. Login:
+• Choose option 1 and enter your username and password.
+• Successful login starts the group chat.
+2. Registration:
+• Choose option 2 to register a new user with unique credentials.
+3. Group Chat:
+• After logging in, type messages, and they will be broadcast to all connected clients.
+• The server will display messages sent by clients in the console.
+Testing the Project
+
+1. Start the server.
+2. Open multiple client instances to simulate multiple users.
+3. Test the following scenarios:
+• Successful login with valid credentials.
+• Login failure with incorrect username or password.
+• Registration of new users.
+• Group chat where all messages are broadcast to all clients.
+Example Interaction
+
+Server Console:
+arduino
 ￼Copy code
-Hello, everyone!
-2. The server receives the message and forwards it to Client B, Client C, and all other connected clients.
+Server started, listening on port 10001...
+Client connected: /127.0.0.1
+User zhangsan logged in successfully
+zhangsan sent: Hello everyone!
+Client 1:
+mathematica
+￼Copy code
+Server connected successfully
+==============Welcome to the Chatroom================
+1 Login
+2 Register
+Enter your choice:
+1
+Enter Username:
+zhangsan
+Enter Password:
+123
+Login successful, start chatting
+Enter your message:
+Hello everyone!
+Client 2:
+yaml
+￼Copy code
+Server connected successfully
+==============Welcome to the Chatroom================
+1 Login
+2 Register
+Enter your choice:
+1
+Enter Username:
+lisi
+Enter Password:
+1234
+Login successful, start chatting
+zhangsan sent: Hello everyone!
+Error Handling
+
+• Incorrect Password: Displays "Incorrect password".
+• Username Not Found: Displays "Username does not exist".
+• Disconnected Clients: Server detects disconnections and removes invalid sockets.
+Known Issues
+
+1. Broken Pipe: Occurs when a client disconnects unexpectedly.
+• Solution: Check for valid sockets before broadcasting messages.
+2. Port Conflicts: Ensure port 10001 is free before starting the server.
+Future Enhancements
+
+1. Add private chat functionality between users.
+2. Improve user registration validation with advanced checks.
+3. Implement a GUI interface for a better user experience.
+Author
+
+• ruuuuuuuby
+• Contact: [Your Email or GitHub Profile]
+License
+
+This project is licensed under the MIT License.
